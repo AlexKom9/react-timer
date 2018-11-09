@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import TimerType from "./TimerType";
+import Progress from "./Progress";
 
 class Timer extends Component {
   constructor(props) {
@@ -26,6 +27,7 @@ class Timer extends Component {
   };
 
   startTimer = () => {
+    this.stopTimer();
     this.setState({
       timerIsRun: true
     });
@@ -34,7 +36,17 @@ class Timer extends Component {
       this.setState({
         seconds: this.state.seconds - 1
       });
+      if (this.state.seconds === 0) {
+        this.finishTimer();
+      }
     }, 1000);
+  };
+
+  finishTimer = () => {
+    this.setState({
+      timerIsRun: false
+    });
+    clearInterval(this.timer);
   };
 
   stopTimer = () => {
@@ -46,7 +58,11 @@ class Timer extends Component {
   };
 
   getTime = () => {
-    const { seconds, timerType } = this.state;
+    function getPercent(a, b) {
+      if (Number(b) === 0) return 100;
+      return 100 - Math.floor((a / b) * 100);
+    }
+    const { seconds, initialSeconds, timerType } = this.state;
     let time = {};
     // debugger;
     switch (JSON.stringify(timerType)) {
@@ -55,7 +71,13 @@ class Timer extends Component {
         time = {
           hours: Math.floor(seconds / 3600),
           minutes: Math.floor((seconds % 3600) / 60),
-          seconds: (seconds % 3600) % 60
+          seconds: (seconds % 3600) % 60,
+          hoursPercent:
+            Math.floor(seconds / 3600) === 0
+              ? 100
+              : getPercent(seconds, initialSeconds),
+          minutesPercent: getPercent(Math.floor((seconds % 3600) / 60), 60),
+          secondsPercent: getPercent((seconds % 3600) % 60, 60)
         };
         break;
       case JSON.stringify({ hours: true, minutes: false, seconds: false }):
@@ -64,7 +86,10 @@ class Timer extends Component {
         time = {
           hours: Math.floor(seconds / 3600),
           minutes: false,
-          seconds: false
+          seconds: false,
+          hoursPercent: getPercent(seconds, initialSeconds),
+          minutesPercent: false,
+          secondsPercent: false
         };
         break;
       case JSON.stringify({ hours: true, minutes: true, seconds: false }):
@@ -72,7 +97,13 @@ class Timer extends Component {
         time = {
           hours: Math.floor(seconds / 3600),
           minutes: Math.floor((seconds % 3600) / 60),
-          seconds: false
+          seconds: false,
+          hoursPercent:
+            Math.floor(seconds / 3600) === 0
+              ? 100
+              : getPercent(seconds, initialSeconds),
+          minutesPercent: getPercent(Math.floor((seconds % 3600) / 60), 60),
+          secondsPercent: false
         };
         break;
       case JSON.stringify({ hours: true, minutes: false, seconds: true }):
@@ -80,7 +111,13 @@ class Timer extends Component {
         time = {
           hours: Math.floor(seconds / 3600),
           minutes: false,
-          seconds: seconds % 3600
+          seconds: seconds % 3600,
+          hoursPercent: getPercent(
+            Math.floor(seconds / 3600),
+            Math.floor(initialSeconds / 3600)
+          ),
+          minutesPercent: false,
+          secondsPercent: getPercent(seconds % 3600, 3600)
         };
         break;
       case JSON.stringify({ hours: false, minutes: true, seconds: true }):
@@ -88,7 +125,13 @@ class Timer extends Component {
         time = {
           hours: false,
           minutes: Math.floor(seconds / 60),
-          seconds: seconds % 60
+          seconds: seconds % 60,
+          hoursPercent: false,
+          minutesPercent: getPercent(
+            Math.floor(seconds / 60),
+            Math.floor(initialSeconds / 60)
+          ),
+          secondsPercent: getPercent(seconds % 3600, 60)
         };
         break;
       case JSON.stringify({ hours: false, minutes: true, seconds: false }):
@@ -96,7 +139,10 @@ class Timer extends Component {
         time = {
           hours: false,
           minutes: Math.floor(seconds / 60),
-          seconds: false
+          seconds: false,
+          hoursPercent: false,
+          minutesPercent: getPercent(seconds, initialSeconds),
+          secondsPercent: false
         };
         break;
       case JSON.stringify({ hours: false, minutes: false, seconds: true }):
@@ -104,7 +150,10 @@ class Timer extends Component {
         time = {
           hours: false,
           minutes: false,
-          seconds: seconds
+          seconds: seconds,
+          hoursPercent: false,
+          minutesPercent: false,
+          secondsPercent: getPercent(seconds, initialSeconds)
         };
         break;
     }
@@ -127,17 +176,33 @@ class Timer extends Component {
           value={this.state.initialSeconds}
           onChange={this.setSeconds}
         />
-        <button disabled={this.state.timerIsRun} onClick={this.startTimer}>
+        <button
+          disabled={this.state.timerIsRun || !this.state.initialSeconds}
+          onClick={this.startTimer}
+        >
           Start Timer
         </button>
         <button disabled={!this.state.timerIsRun} onClick={this.stopTimer}>
           Stop Timer
         </button>
         {this.state.timerIsRun ? <h2>{this.state.seconds}</h2> : null}
-        {timerType.hours ? <div>hours: {time.hours}</div> : null}
-        {timerType.minutes ? <div>minutes: {time.minutes}</div> : null}
-        {timerType.seconds ? <div>seconds: {time.seconds}</div> : null}
+        {timerType.hours ? (
+          <div>
+            hours: {time.hours} {time.hoursPercent}%
+          </div>
+        ) : null}
+        {timerType.minutes ? (
+          <div>
+            minutes: {time.minutes} {time.minutesPercent}%
+          </div>
+        ) : null}
+        {timerType.seconds ? (
+          <div>
+            seconds: {time.seconds} {time.secondsPercent}%
+          </div>
+        ) : null}
         <TimerType setTimerType={this.setTimerType} />
+        <Progress />
       </div>
     );
   }

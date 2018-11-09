@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
+import TimerType from "./TimerType";
 
 class Timer extends Component {
   constructor(props) {
@@ -8,9 +8,9 @@ class Timer extends Component {
       seconds: 0,
       initialSeconds: "",
       timerIsRun: false,
-      timerCase: {
+      timerType: {
         hours: true,
-        minutes: false,
+        minutes: true,
         seconds: true
       }
     };
@@ -29,7 +29,7 @@ class Timer extends Component {
     this.setState({
       timerIsRun: true
     });
-    clearInterval(this.timer)
+    clearInterval(this.timer);
     this.timer = setInterval(() => {
       this.setState({
         seconds: this.state.seconds - 1
@@ -46,10 +46,10 @@ class Timer extends Component {
   };
 
   getTime = () => {
-    const { seconds, timerCase } = this.state;
+    const { seconds, timerType } = this.state;
     let time = {};
     // debugger;
-    switch (JSON.stringify(timerCase)) {
+    switch (JSON.stringify(timerType)) {
       default:
         console.log("all");
         time = {
@@ -75,7 +75,7 @@ class Timer extends Component {
           seconds: false
         };
         break;
-      case JSON.stringify({hours: true, minutes: false, seconds: true }):
+      case JSON.stringify({ hours: true, minutes: false, seconds: true }):
         console.log("hours && seconds");
         time = {
           hours: Math.floor(seconds / 3600),
@@ -83,7 +83,7 @@ class Timer extends Component {
           seconds: seconds % 3600
         };
         break;
-      case JSON.stringify({ hours: false, minutes: true, seconds: true}):
+      case JSON.stringify({ hours: false, minutes: true, seconds: true }):
         console.log("minutes, seconds");
         time = {
           hours: false,
@@ -91,7 +91,7 @@ class Timer extends Component {
           seconds: seconds % 60
         };
         break;
-      case JSON.stringify({hours: false, minutes: true, seconds: false}):
+      case JSON.stringify({ hours: false, minutes: true, seconds: false }):
         console.log("minutes");
         time = {
           hours: false,
@@ -99,7 +99,7 @@ class Timer extends Component {
           seconds: false
         };
         break;
-      case JSON.stringify({hours: false, minutes: false, seconds: true}):
+      case JSON.stringify({ hours: false, minutes: false, seconds: true }):
         console.log("seconds");
         time = {
           hours: false,
@@ -111,8 +111,14 @@ class Timer extends Component {
     return time;
   };
 
+  setTimerType = timerType => {
+    this.setState({
+      timerType
+    });
+  };
+
   render() {
-    const { timerCase } = this.state;
+    const { timerType } = this.state;
     const time = this.getTime();
     return (
       <div>
@@ -128,10 +134,10 @@ class Timer extends Component {
           Stop Timer
         </button>
         {this.state.timerIsRun ? <h2>{this.state.seconds}</h2> : null}
-        {timerCase.hours ? <div>hours: {time.hours}</div> : null}
-        {timerCase.minutes ? <div>minutes: {time.minutes}</div> : null}
-        {timerCase.seconds ? <div>seconds: {time.seconds}</div> : null}
-
+        {timerType.hours ? <div>hours: {time.hours}</div> : null}
+        {timerType.minutes ? <div>minutes: {time.minutes}</div> : null}
+        {timerType.seconds ? <div>seconds: {time.seconds}</div> : null}
+        <TimerType setTimerType={this.setTimerType} />
       </div>
     );
   }

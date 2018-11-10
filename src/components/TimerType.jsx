@@ -5,42 +5,46 @@ class TimerType extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputField: props.types.map(elem=> elem.trim().toLowerCase()).join(", "),
-      textAreaField: props.types.map(elem=> elem.trim().toLowerCase()).join("\n"),
-      selectField: props.types.map(elem=>elem.trim().toLowerCase()),
+      inputField: props.types.map(elem => elem.trim().toLowerCase()).join(", "),
+      textAreaField: props.types
+        .map(elem => elem.trim().toLowerCase())
+        .join("\n"),
+      selectField: props.types.map(elem => elem.trim().toLowerCase())
     };
     this.refSelectField = React.createRef();
   }
 
-  static defaultProps = { types: [constants.HOURS, constants.MINUTES, constants.SECONDS] };
+  static defaultProps = {
+    types: [constants.HOURS, constants.MINUTES, constants.SECONDS]
+  };
 
   selectHandler = () => {
     const options = Array.prototype.slice.call(
       this.refSelectField.current.querySelectorAll("option")
     );
     const arr = options
-      .filter(option => {
-        if (option.selected) {
-          return true;
-        }
-      })
+      .filter(option => option.selected)
       .map(option => option.value);
 
-    this.setState({
-      inputField: arr.join(", "),
-      textAreaField: arr.join("\n"),
-      selectField: arr
-    }, this.setTimerType);
+    this.setState(
+      {
+        inputField: arr.join(", "),
+        textAreaField: arr.join("\n"),
+        selectField: arr
+      },
+      this.setTimerType
+    );
   };
 
   inputHandler = event => {
     const value = event.target.value;
     const arr = value.split(",").map(elem => elem.trim());
-    this.setState({
-      inputField: value,
-      textAreaField: arr.map(elem => elem.trim().toLowerCase()).join("\n"),
-      selectField: arr
-    },
+    this.setState(
+      {
+        inputField: value,
+        textAreaField: arr.map(elem => elem.trim().toLowerCase()).join("\n"),
+        selectField: arr
+      },
       this.setTimerType
     );
   };
@@ -48,11 +52,12 @@ class TimerType extends Component {
   textAreaHandler = event => {
     const value = event.target.value;
     const arr = value.split("\n");
-    this.setState({
-      inputField: arr.map(elem => elem.trim().toLowerCase()).join(", "),
-      textAreaField: value,
-      selectField: arr
-    },
+    this.setState(
+      {
+        inputField: arr.map(elem => elem.trim().toLowerCase()).join(", "),
+        textAreaField: value,
+        selectField: arr
+      },
       this.setTimerType
     );
   };
@@ -65,10 +70,14 @@ class TimerType extends Component {
     if (selectField.map(elem => elem.toUpperCase()).includes(constants.HOURS)) {
       hours = true;
     }
-    if (selectField.map(elem => elem.toUpperCase()).includes(constants.MINUTES)) {
+    if (
+      selectField.map(elem => elem.toUpperCase()).includes(constants.MINUTES)
+    ) {
       minutes = true;
     }
-    if (selectField.map(elem => elem.toUpperCase()).includes(constants.SECONDS)) {
+    if (
+      selectField.map(elem => elem.toUpperCase()).includes(constants.SECONDS)
+    ) {
       seconds = true;
     }
     const timerType = {
@@ -76,20 +85,21 @@ class TimerType extends Component {
       minutes,
       seconds
     };
-    console.log(timerType)
     this.props.setTimerType(timerType);
   };
 
   render() {
     return (
-      <div>
+      <div className="timer-type">
         <input
+          className="timer-type__input"
           type="text"
           value={this.state.inputField}
           onChange={this.inputHandler}
         />
         <br />
         <textarea
+          className="timer-type__text"
           value={this.state.textAreaField}
           onChange={this.textAreaHandler}
           cols="30"
@@ -98,6 +108,7 @@ class TimerType extends Component {
         <br />
         <select
           multiple
+          className="timer-type__select"
           onChange={this.selectHandler}
           ref={this.refSelectField}
           value={this.state.selectField}

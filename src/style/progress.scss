@@ -5,15 +5,17 @@ $hours-color: #3D95FF;
 $background-color: #24282B;
 
 
-.timer__container {
-  background-image: url('../img/bgi.jpg')
-}
+//.timer__container {
+//  background-image: url('../img/bgi.jpg');
+//}
 
 .progress {
   margin: 20px;
   &__container {
     background-image: url('../img/bgi.jpg');
     display: flex;
+    min-height: 163.64px;
+
   }
   &-wrap {
     background-image: url('../img/bgi.jpg')

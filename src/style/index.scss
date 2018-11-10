@@ -1,0 +1,18 @@
+* {
+  outline-color: coral;
+}
+
+.timer {
+  &__start {
+    margin: 10px;
+  }
+  &__type {
+    margin: 10px;
+  }
+}
+
+.timer-type {
+  &__input {
+    margin-bottom: 10px;
+  }
+}

@@ -77,7 +77,7 @@ class Progress extends Component {
 
 Progress.propTypes = {
   percent: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
+  value: PropTypes.any.isRequired,
   name: PropTypes.string.isRequired
 };
 

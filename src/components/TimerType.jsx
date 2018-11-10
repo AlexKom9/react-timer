@@ -5,21 +5,19 @@ class TimerType extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputField: "",
-      textAriaField: "",
-      selectField: [],
-      result: ""
+      inputField: props.types.map(elem=> elem.trim().toLowerCase()).join(", "),
+      textAreaField: props.types.map(elem=> elem.trim().toLowerCase()).join("\n"),
+      selectField: props.types.map(elem=>elem.trim().toLowerCase()),
     };
-    this.inputField = React.createRef();
-    this.selectField = React.createRef();
+    this.refSelectField = React.createRef();
   }
 
-  selectHandler = event => {
-    console.log(event.target.selectedOptions);
+  static defaultProps = { types: [constants.HOURS, constants.MINUTES, constants.SECONDS] };
+
+  selectHandler = () => {
     const options = Array.prototype.slice.call(
-      this.selectField.current.querySelectorAll("option")
+      this.refSelectField.current.querySelectorAll("option")
     );
-    console.log(options);
     const arr = options
       .filter(option => {
         if (option.selected) {
@@ -28,14 +26,13 @@ class TimerType extends Component {
       })
       .map(option => option.value);
 
-    console.log(arr);
-
     this.setState({
       inputField: arr.join(", "),
       textAreaField: arr.join("\n"),
       selectField: arr
-    });
+    }, this.setTimerType);
   };
+
   inputHandler = event => {
     const value = event.target.value;
     const arr = value.split(",").map(elem => elem.trim());
@@ -43,7 +40,9 @@ class TimerType extends Component {
       inputField: value,
       textAreaField: arr.map(elem => elem.trim().toLowerCase()).join("\n"),
       selectField: arr
-    });
+    },
+      this.setTimerType
+    );
   };
 
   textAreaHandler = event => {
@@ -53,52 +52,38 @@ class TimerType extends Component {
       inputField: arr.map(elem => elem.trim().toLowerCase()).join(", "),
       textAreaField: value,
       selectField: arr
-    });
+    },
+      this.setTimerType
+    );
   };
 
-  componentDidUpdate(prevProps, prevState) {
+  setTimerType = () => {
     const { selectField } = this.state;
-    if (JSON.stringify(selectField) !== JSON.stringify(prevState.selectField)) {
-      this.updateSelectField();
+    let hours = false;
+    let minutes = false;
+    let seconds = false;
+    if (selectField.map(elem => elem.toUpperCase()).includes(constants.HOURS)) {
+      hours = true;
     }
-  }
-
-  updateSelectField = () => {
-    const { selectField } = this.state;
-    console.log(selectField);
-    const options = this.selectField.current.querySelectorAll("option");
-    console.log(options);
-    options.forEach(option => {
-      option.selected = selectField.includes(option.value);
-    });
-
-    this.setState( () => {
-      let hours = false;
-      let minutes = false;
-      let seconds = false;
-      if (selectField.includes(constants.HOURS)) {
-        hours = true;
-      }
-      if (selectField.includes(constants.MINUTES)) {
-        minutes = true;
-      }
-      if (selectField.includes(constants.SECONDS)) {
-        seconds = true;
-      }
-      return {
-        timerType: { hours, minutes, seconds }
-      };
-    }, () => {
-      this.props.setTimerType(this.state.timerType)
-
-    });
+    if (selectField.map(elem => elem.toUpperCase()).includes(constants.MINUTES)) {
+      minutes = true;
+    }
+    if (selectField.map(elem => elem.toUpperCase()).includes(constants.SECONDS)) {
+      seconds = true;
+    }
+    const timerType = {
+      hours,
+      minutes,
+      seconds
+    };
+    console.log(timerType)
+    this.props.setTimerType(timerType);
   };
 
   render() {
     return (
       <div>
         <input
-          ref={this.inputField}
           type="text"
           value={this.state.inputField}
           onChange={this.inputHandler}
@@ -111,10 +96,21 @@ class TimerType extends Component {
           rows="10"
         />
         <br />
-        <select multiple onChange={this.selectHandler} ref={this.selectField}>
-          <option value={constants.HOURS}>{constants.HOURS}</option>
-          <option value={constants.MINUTES}>{constants.MINUTES}</option>
-          <option value={constants.SECONDS}>{constants.SECONDS}</option>
+        <select
+          multiple
+          onChange={this.selectHandler}
+          ref={this.refSelectField}
+          value={this.state.selectField}
+        >
+          {this.props.types.map(type => (
+            <option
+              key={type}
+              value={constants[type].toLowerCase()}
+              selected={this.state.selectField.includes(constants[type])}
+            >
+              {constants[type].toLowerCase()}
+            </option>
+          ))}
         </select>
       </div>
     );

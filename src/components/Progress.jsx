@@ -4,14 +4,10 @@ import "../style/progress.scss";
 import bgi from "../img/bgi.jpg";
 
 class Progress extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
+   render() {
     const { name, value, percent } = this.props;
-    const sqSize = 150;
-    const strokeWidth = 15;
+    const sqSize = 120;
+    const strokeWidth = 8;
     const radius = (sqSize - strokeWidth) / 2;
     const viewBox = `0 0 ${sqSize} ${sqSize}`;
     const dashArray = radius * Math.PI * 2;
@@ -21,7 +17,7 @@ class Progress extends Component {
         <svg width={sqSize} height={sqSize} viewBox={viewBox}>
           <defs>
             <filter id="inset-shadow">
-              <feFlood flood-color="black" />
+              <feFlood floodColor="black" />
               <feComposite operator="xor" in2="SourceGraphic" />
               <feGaussianBlur stdDeviation="2" />
               <feComposite operator="in" in2="SourceGraphic" result="map" />
@@ -68,12 +64,10 @@ class Progress extends Component {
             }}
           />
           <foreignObject className="node" width={sqSize} height={sqSize}>
-            <body xmlns="http://www.w3.org/1999/xhtml">
               <div>
                 <span className={`circle__value ${name}`}>{value}</span>
                 <p className={`circle__name ${name}`}>{name}</p>
               </div>
-            </body>
           </foreignObject>
         </svg>
       </div>
@@ -83,7 +77,7 @@ class Progress extends Component {
 
 Progress.propTypes = {
   percent: PropTypes.number.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired
 };
 

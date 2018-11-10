@@ -64,26 +64,10 @@ class TimerType extends Component {
 
   setTimerType = () => {
     const { selectField } = this.state;
-    let hours = false;
-    let minutes = false;
-    let seconds = false;
-    if (selectField.map(elem => elem.toUpperCase()).includes(constants.HOURS)) {
-      hours = true;
-    }
-    if (
-      selectField.map(elem => elem.toUpperCase()).includes(constants.MINUTES)
-    ) {
-      minutes = true;
-    }
-    if (
-      selectField.map(elem => elem.toUpperCase()).includes(constants.SECONDS)
-    ) {
-      seconds = true;
-    }
     const timerType = {
-      hours,
-      minutes,
-      seconds
+      hours: selectField.map(elem => elem.toUpperCase()).includes(constants.HOURS),
+      minutes: selectField.map(elem => elem.toUpperCase()).includes(constants.MINUTES),
+      seconds: selectField.map(elem => elem.toUpperCase()).includes(constants.SECONDS),
     };
     this.props.setTimerType(timerType);
   };

@@ -19,7 +19,7 @@ class Timer extends Component {
 
   setSeconds = event => {
     const value = event.target.value;
-    if(value < 0 ) return;
+    if (value < 0) return;
     this.setState({
       initialSeconds: event.target.value,
       seconds: event.target.value,
@@ -28,36 +28,45 @@ class Timer extends Component {
   };
 
   startTimer = () => {
-    clearInterval(this.timer);
-    this.setState({
-      timerIsRun: true
-    });
-    this.timer = setInterval(() => {
-      this.setState({
-        seconds: this.state.seconds - 1
-      });
-      if (this.state.seconds <= 0) {
-        this.setState({
-          seconds: 0
-        });
-        this.finishTimer();
+    this.setState(
+      {
+        timerIsRun: true,
+        seconds: this.state.initialSeconds
+      },
+      () => {
+        this.timer = setInterval(() => {
+          this.setState({
+            seconds: this.state.seconds - 1
+          });
+          if (this.state.seconds <= 0) {
+            this.finishTimer();
+          }
+        }, 1000);
       }
-    }, 1000);
+    );
   };
 
   finishTimer = () => {
-    this.setState({
-      timerIsRun: false
-    });
-    clearInterval(this.timer);
+    this.setState(
+      {
+        timerIsRun: false
+      },
+      () => {
+        clearInterval(this.timer);
+      }
+    );
   };
 
   stopTimer = () => {
-    this.setState({
-      timerIsRun: false,
-      seconds: this.state.initialSeconds
-    });
-    clearInterval(this.timer);
+    this.setState(
+      {
+        timerIsRun: false,
+        seconds: this.state.initialSeconds
+      },
+      () => {
+        clearInterval(this.timer);
+      }
+    );
   };
 
   getTime = () => {
@@ -176,26 +185,41 @@ class Timer extends Component {
       <div className="timer">
         <div className="progress__container">
           {timerType.hours ? (
-            <Progress name="hours" value={time.hours} percent={time.hoursPercent}/>
+            <Progress
+              name="hours"
+              value={time.hours}
+              percent={time.hoursPercent}
+            />
           ) : null}
           {timerType.minutes ? (
             <div>
-              <Progress name="minutes" value={time.minutes} percent={time.minutesPercent}/>
+              <Progress
+                name="minutes"
+                value={time.minutes}
+                percent={time.minutesPercent}
+              />
             </div>
           ) : null}
           {timerType.seconds ? (
-            <Progress name="seconds" value={time.seconds} percent={time.secondsPercent}/>
+            <Progress
+              name="seconds"
+              value={time.seconds}
+              percent={time.secondsPercent}
+            />
           ) : null}
         </div>
 
         <div className="timer__start">
           <input
+            disabled={this.state.timerIsRun}
             type="number"
             value={this.state.initialSeconds}
             onChange={this.setSeconds}
           />
           <button
-            disabled={this.state.timerIsRun || !Number(this.state.initialSeconds)}
+            disabled={
+              this.state.timerIsRun || !Number(this.state.initialSeconds)
+            }
             onClick={this.startTimer}
           >
             Start Timer
@@ -206,9 +230,8 @@ class Timer extends Component {
         </div>
 
         <div className="timer__type">
-          <TimerType setTimerType={this.setTimerType}/>
+          <TimerType setTimerType={this.setTimerType} />
         </div>
-
       </div>
     );
   }

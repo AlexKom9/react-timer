@@ -27,7 +27,8 @@ class Timer extends Component {
   };
 
   startTimer = () => {
-    this.stopTimer();
+    // this.stopTimer();
+    clearInterval(this.timer);
     this.setState({
       timerIsRun: true
     });
@@ -185,6 +186,20 @@ class Timer extends Component {
         <button disabled={!this.state.timerIsRun} onClick={this.stopTimer}>
           Stop Timer
         </button>
+        <div className="progress__container">
+          {timerType.hours ? (
+            <Progress name="hours" value={time.hours} percent={time.hoursPercent}/>
+
+          ) : null}
+          {timerType.minutes ? (
+            <div>
+              <Progress name="minutes" value={time.minutes} percent={time.minutesPercent}/>
+            </div>
+          ) : null}
+          {timerType.seconds ? (
+            <Progress name="seconds" value={time.seconds} percent={time.secondsPercent}/>
+          ) : null}
+        </div>
         {this.state.timerIsRun ? <h2>{this.state.seconds}</h2> : null}
         {timerType.hours ? (
           <div>
@@ -202,7 +217,7 @@ class Timer extends Component {
           </div>
         ) : null}
         <TimerType setTimerType={this.setTimerType} />
-        <Progress />
+
       </div>
     );
   }

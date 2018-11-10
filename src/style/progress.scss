@@ -1,0 +1,95 @@
+$seconds-color: #fbd956;
+$minutes-color: #99DD78;
+$hours-color: #3D95FF;
+
+$background-color: #24282B;
+
+
+.timer__container {
+  background-image: url('../img/bgi.jpg')
+}
+
+.progress {
+  margin: 20px;
+  &__container {
+    background-image: url('../img/bgi.jpg');
+    display: flex;
+  }
+  &-wrap {
+    background-image: url('../img/bgi.jpg')
+
+  }
+}
+
+.circle__background {
+  stroke: $background-color;
+}
+
+.circle__progress {
+  stroke: red;
+  &.seconds {
+    stroke: $seconds-color;
+  }
+  &.minutes {
+    stroke: $minutes-color;
+  }
+  &.hours {
+    stroke: $hours-color;
+  }
+}
+
+.circle__value {
+  font-size: 38px;
+  font-weight: 500;
+  color: #fff;
+  text-transform: uppercase;
+  line-height: 38px;
+}
+
+.circle__name {
+  margin: 0;
+  font-size: 13px;
+  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: #fff;
+  &.seconds {
+    color: $seconds-color;
+  }
+  &.minutes {
+    color: $minutes-color;
+  }
+  &.hours {
+    color: $hours-color;
+  }
+}
+
+
+.node {
+  & div {
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 21%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+}
+
+
+//.circle-progress {
+//  stroke: #fbd956;
+//  stroke-linecap: round;
+//  stroke-linejoin: round;
+//}
+//.circle-text {
+//  font-size: 3em;
+//  font-weight: bold;
+//  fill: #fbd956;
+//}

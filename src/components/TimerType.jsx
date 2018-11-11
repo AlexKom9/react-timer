@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import * as constants from "../constants/constant";
+import PropTypes from 'prop-types';
 
 class TimerType extends Component {
   constructor(props) {
@@ -39,6 +40,7 @@ class TimerType extends Component {
   inputHandler = event => {
     const value = event.target.value;
     const arr = value.split(",").map(elem => elem.trim());
+    console.log('input handler')
     this.setState(
       {
         inputField: value,
@@ -112,6 +114,8 @@ class TimerType extends Component {
   }
 }
 
-TimerType.propTypes = {};
+TimerType.propTypes = {
+  setTimerType: PropTypes.func.isRequired
+};
 
 export default TimerType;

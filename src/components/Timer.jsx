@@ -140,8 +140,8 @@ class Timer extends Component {
           seconds: seconds % 60,
           hoursPercent: false,
           minutesPercent: getPercent(
-            Math.floor(seconds / 60),
-            Math.floor(initialSeconds / 60)
+            Math.floor(seconds),
+            Math.floor(initialSeconds)
           ),
           secondsPercent: getPercent(seconds % 3600, 60)
         };

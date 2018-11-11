@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import * as constants from "../constants/constant";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
+
+window.constants = constants;
 
 class TimerType extends Component {
   constructor(props) {
@@ -10,7 +12,7 @@ class TimerType extends Component {
       textAreaField: props.types
         .map(elem => elem.trim().toLowerCase())
         .join("\n"),
-      selectField: props.types.map(elem => elem.trim().toLowerCase())
+      selectField: props.types.map(elem => elem.trim().toUpperCase())
     };
     this.refSelectField = React.createRef();
   }
@@ -31,7 +33,7 @@ class TimerType extends Component {
       {
         inputField: arr.join(", "),
         textAreaField: arr.join("\n"),
-        selectField: arr
+        selectField: arr.map(elem => elem.toUpperCase())
       },
       this.setTimerType
     );
@@ -40,12 +42,11 @@ class TimerType extends Component {
   inputHandler = event => {
     const value = event.target.value;
     const arr = value.split(",").map(elem => elem.trim());
-    console.log('input handler')
     this.setState(
       {
         inputField: value,
-        textAreaField: arr.map(elem => elem.trim().toLowerCase()).join("\n"),
-        selectField: arr
+        textAreaField: arr.map(elem => elem.trim()).join("\n"),
+        selectField: arr.map(elem => elem.trim().toUpperCase())
       },
       this.setTimerType
     );
@@ -56,9 +57,9 @@ class TimerType extends Component {
     const arr = value.split("\n");
     this.setState(
       {
-        inputField: arr.map(elem => elem.trim().toLowerCase()).join(", "),
+        inputField: arr.map(elem => elem.trim()).join(", "),
         textAreaField: value,
-        selectField: arr
+        selectField: arr.map(elem => elem.trim().toUpperCase())
       },
       this.setTimerType
     );
@@ -67,9 +68,15 @@ class TimerType extends Component {
   setTimerType = () => {
     const { selectField } = this.state;
     const timerType = {
-      hours: selectField.map(elem => elem.toUpperCase()).includes(constants.HOURS),
-      minutes: selectField.map(elem => elem.toUpperCase()).includes(constants.MINUTES),
-      seconds: selectField.map(elem => elem.toUpperCase()).includes(constants.SECONDS),
+      hours: selectField
+        .map(elem => elem.toUpperCase())
+        .includes(constants.HOURS),
+      minutes: selectField
+        .map(elem => elem.toUpperCase())
+        .includes(constants.MINUTES),
+      seconds: selectField
+        .map(elem => elem.toUpperCase())
+        .includes(constants.SECONDS)
     };
     this.props.setTimerType(timerType);
   };
@@ -97,15 +104,15 @@ class TimerType extends Component {
           className="timer-type__select"
           onChange={this.selectHandler}
           ref={this.refSelectField}
-          value={this.state.selectField}
+          // value={this.state.selectField}
         >
           {this.props.types.map(type => (
             <option
               key={type}
-              value={constants[type].toLowerCase()}
-              selected={this.state.selectField.includes(constants[type])}
+              value={type.toLowerCase()}
+              selected={this.state.selectField.includes(type)}
             >
-              {constants[type].toLowerCase()}
+              {type.toLowerCase()}
             </option>
           ))}
         </select>

@@ -192,13 +192,11 @@ class Timer extends Component {
             />
           ) : null}
           {timerType.minutes ? (
-            <div>
               <Progress
                 name="minutes"
                 value={time.minutes}
                 percent={time.minutesPercent}
               />
-            </div>
           ) : null}
           {timerType.seconds ? (
             <Progress
@@ -211,12 +209,14 @@ class Timer extends Component {
 
         <div className="timer__start">
           <input
+            id="timer-value"
             disabled={this.state.timerIsRun}
             type="number"
             value={this.state.initialSeconds}
             onChange={this.setSeconds}
           />
           <button
+            id="start-timer"
             disabled={
               this.state.timerIsRun || !Number(this.state.initialSeconds)
             }
@@ -224,7 +224,10 @@ class Timer extends Component {
           >
             Start Timer
           </button>
-          <button disabled={!this.state.timerIsRun} onClick={this.stopTimer}>
+          <button
+            id="stop-timer"
+            disabled={!this.state.timerIsRun}
+            onClick={this.stopTimer}>
             Stop Timer
           </button>
         </div>

@@ -27,6 +27,9 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "enzyme": "^3.7.0",
+    "enzyme-adapter-react-16": "^1.7.0",
+    "enzyme-to-json": "^3.3.4",
     "gh-pages": "^2.0.1"
   }
 }

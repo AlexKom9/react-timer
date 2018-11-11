@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TimerType initial reander 1`] = `
+"<div class=\\"timer-type\\"><input type=\\"text\\" class=\\"timer-type__input\\" value=\\"hours, minutes, seconds\\"/><br/><textarea class=\\"timer-type__text\\" cols=\\"30\\" rows=\\"10\\">hours
+minutes
+seconds</textarea><br/><select multiple=\\"\\" class=\\"timer-type__select\\"><option selected=\\"\\" value=\\"hours\\">hours</option><option selected=\\"\\" value=\\"minutes\\">minutes</option><option selected=\\"\\" value=\\"seconds\\">seconds</option></select></div>"
+`;
